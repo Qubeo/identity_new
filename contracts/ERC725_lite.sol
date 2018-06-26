@@ -24,6 +24,8 @@ contract ERC725_lite {
         bytes data;
         bool approved;
         bool executed;
+
+        // Chybí gas stuff, nechává se na člověku
     }
 
     // Events

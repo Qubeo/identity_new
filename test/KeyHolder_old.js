@@ -14,7 +14,7 @@ const PHASE = [
 // Seznam otázek:
 // Q: Užití before / beforeEach?
 // Q: V Solidity - jak začínají enum? Od nuly nebo od jedničky? Budeme to používat?
-// Q: Rozdílná syntax v rámci remixu?
+// Q: Rozdílná syntax v rámci remixu? Ne.
 
 // Q: Syntax
 //      var a = await KeyHolder.methods.getKey(acctSha3).call() vs
@@ -39,7 +39,33 @@ const PHASE = [
 
 // Claimy:
 
+/** Call:
+// All three functions call, delegatecall and callcode are very low-level functions and should only be used as
+a last resort as they break the type-safety of Solidity.
+    Note:
+All contracts inherit the members of address, so it is possible to query the balance of the current contract using this.balance
+    Warning:
+All these functions are low-level functions and should be used with care.  Specifically, any unknown
+contract might be malicious and if you call it, you hand over control to that contract which could in turn call back
+into your contract, so be prepared for changes to your state variables when the call returns.
+*/
 
+
+/** Tohle se píše v https://github.com/ethereum/wiki/wiki/JavaScript-API#contract-methods, ale getData mi nefunguje.
+ * // Automatically determines the use of call or sendTransaction based on the method type
+ myContractInstance.myMethod(param1 [, param2, ...] [, transactionObject] [, defaultBlock] [, callback]);
+
+ // Explicitly calling this method
+ myContractInstance.myMethod.call(param1 [, param2, ...] [, transactionObject] [, defaultBlock] [, callback]);
+
+ // Explicitly sending a transaction to this method
+ myContractInstance.myMethod.sendTransaction(param1 [, param2, ...] [, transactionObject] [, callback]);
+
+ // Get the call data, so you can call the contract through some other means
+ // var myCallData = myContractInstance.myMethod.request(param1 [, param2, ...]);
+ var myCallData = myContractInstance.myMethod.getData(param1 [, param2, ...]);
+ // myCallData = '0x45ff3ff6000000000004545345345345..'
+ */
 
 
 contract('KeyHolder', function (accounts) {
@@ -56,6 +82,8 @@ contract('KeyHolder', function (accounts) {
     // You can't deploy abstract contracts to the Ethereum blockchain. If you run into any more issues please open a new issue."
 
     // Q: Co je 'KeyHolder'? V rámci artifacts.require scope? contract() scope? Je to to samé, bo něco jiného?
+
+    // Q: Kde se definuje verze web3.js, co se užívá?
 
     // Zkouším si různé assert varianty
     it("creates the contract", async function() {
